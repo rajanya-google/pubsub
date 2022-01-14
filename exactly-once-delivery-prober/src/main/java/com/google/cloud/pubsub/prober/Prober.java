@@ -399,21 +399,21 @@ public class Prober {
     }
     logger.log(Level.INFO, "Starting probes");
     started = true;
-    // Cleanup old instances of topic and subscription if necessary.
-    if (cleanup()) {
-      // If we have deleted the old topic or subscriber, wait two minutes before creating new ones
-      // to give times for caches to get flushed. Otherwise, we run into situations where acks may
-      // not get processed right away or we could even try to pull from the old subscription.
-      try {
-        logger.log(Level.INFO, "Waiting 2 minutes before creating new topic and subscription.");
-        Thread.sleep(2 * 60 * 1000);
-      } catch (InterruptedException e) {
-        logger.log(
-            Level.WARNING, "Sleep before creating new topic and subscription interrupted.", e);
-      }
-    }
-    createTopic();
-    createSubscription();
+//    // Cleanup old instances of topic and subscription if necessary.
+//    if (cleanup()) {
+//      // If we have deleted the old topic or subscriber, wait two minutes before creating new ones
+//      // to give times for caches to get flushed. Otherwise, we run into situations where acks may
+//      // not get processed right away or we could even try to pull from the old subscription.
+//      try {
+//        logger.log(Level.INFO, "Waiting 2 minutes before creating new topic and subscription.");
+//        Thread.sleep(2 * 60 * 1000);
+//      } catch (InterruptedException e) {
+//        logger.log(
+//            Level.WARNING, "Sleep before creating new topic and subscription interrupted.", e);
+//      }
+//    }
+//    createTopic();
+//    createSubscription();
     createPublisher();
     switch (subscriptionType) {
       case STREAMING_PULL:
@@ -464,47 +464,47 @@ public class Prober {
       }
     }
 
-    cleanup();
+//    cleanup();
   }
 
-  private void createSubscription() {
-    logger.info("Creating subscription " + fullSubscriptionName);
-    Subscription.Builder builder =
-        Subscription.newBuilder()
-            .setName(fullSubscriptionName.toString())
-            .setTopic(fullTopicName.toString())
-            .setAckDeadlineSeconds(ackDeadlineSeconds);
-            //.setEnableExactlyOnceDelivery(exactlyOnceDelivery);
-    if (messageFilteredProbability > 0.0) {
-      builder.setFilter("attributes." + FILTERED_ATTRIBUTE + " != \"true\"");
-    }
-    builder = updateSubscriptionBuilder(builder);
-    Subscription subscription = builder.build();
-    try {
-      subscriptionAdminClient.createSubscription(builder.build());
-      logger.info("Created subscription " + fullSubscriptionName);
-    } catch (Exception e) {
-      if (e instanceof InterruptedException) {
-        Thread.currentThread().interrupt();
-      }
-      logger.log(Level.WARNING, "Failed to create subscription " + fullSubscriptionName, e);
-    }
-  }
+//  private void createSubscription() {
+//    logger.info("Creating subscription " + fullSubscriptionName);
+//    Subscription.Builder builder =
+//        Subscription.newBuilder()
+//            .setName(fullSubscriptionName.toString())
+//            .setTopic(fullTopicName.toString())
+//            .setAckDeadlineSeconds(ackDeadlineSeconds);
+//            //.setEnableExactlyOnceDelivery(exactlyOnceDelivery);
+//    if (messageFilteredProbability > 0.0) {
+//      builder.setFilter("attributes." + FILTERED_ATTRIBUTE + " != \"true\"");
+//    }
+//    builder = updateSubscriptionBuilder(builder);
+//    Subscription subscription = builder.build();
+//    try {
+//      subscriptionAdminClient.createSubscription(builder.build());
+//      logger.info("Created subscription " + fullSubscriptionName);
+//    } catch (Exception e) {
+//      if (e instanceof InterruptedException) {
+//        Thread.currentThread().interrupt();
+//      }
+//      logger.log(Level.WARNING, "Failed to create subscription " + fullSubscriptionName, e);
+//    }
+//  }
 
-  private void createTopic() {
-    logger.info("Creating topic " + fullTopicName);
-    Topic.Builder builder = Topic.newBuilder().setName(fullTopicName.toString());
-    builder = updateTopicBuilder(builder);
-    try {
-      topicAdminClient.createTopic(builder.build());
-      logger.info("Created topic " + fullTopicName);
-    } catch (Exception e) {
-      if (e instanceof InterruptedException) {
-        Thread.currentThread().interrupt();
-      }
-      logger.log(Level.WARNING, "Failed to create topic " + fullTopicName, e);
-    }
-  }
+//  private void createTopic() {
+//    logger.info("Creating topic " + fullTopicName);
+//    Topic.Builder builder = Topic.newBuilder().setName(fullTopicName.toString());
+//    builder = updateTopicBuilder(builder);
+//    try {
+//      topicAdminClient.createTopic(builder.build());
+//      logger.info("Created topic " + fullTopicName);
+//    } catch (Exception e) {
+//      if (e instanceof InterruptedException) {
+//        Thread.currentThread().interrupt();
+//      }
+//      logger.log(Level.WARNING, "Failed to create topic " + fullTopicName, e);
+//    }
+//  }
 
   private void createPublisher() {
     try {
@@ -640,34 +640,34 @@ public class Prober {
     }
   }
 
-  private boolean deleteTopic(TopicName topic) {
-    try {
-      topicAdminClient.deleteTopic(topic);
-      logger.log(Level.INFO, "Deleted topic %s", topic);
-      return true;
-    } catch (RuntimeException e) {
-      logger.log(Level.WARNING, "Failed to delete topic " + topic, e);
-      return false;
-    }
-  }
+//  private boolean deleteTopic(TopicName topic) {
+//    try {
+//      topicAdminClient.deleteTopic(topic);
+//      logger.log(Level.INFO, "Deleted topic %s", topic);
+//      return true;
+//    } catch (RuntimeException e) {
+//      logger.log(Level.WARNING, "Failed to delete topic " + topic, e);
+//      return false;
+//    }
+//  }
 
-  private boolean deleteSubscription(ProjectSubscriptionName subscription) {
-    try {
-      subscriptionAdminClient.deleteSubscription(subscription);
-      logger.log(Level.INFO, "Deleted subscription %s", subscription);
-      return true;
-    } catch (RuntimeException e) {
-      logger.log(Level.WARNING, "Failed to delete subscription " + subscription, e);
-      return false;
-    }
-  }
+//  private boolean deleteSubscription(ProjectSubscriptionName subscription) {
+//    try {
+//      subscriptionAdminClient.deleteSubscription(subscription);
+//      logger.log(Level.INFO, "Deleted subscription %s", subscription);
+//      return true;
+//    } catch (RuntimeException e) {
+//      logger.log(Level.WARNING, "Failed to delete subscription " + subscription, e);
+//      return false;
+//    }
+//  }
 
   // Returns true if a topic or subscription was deleted.
-  private boolean cleanup() {
-    boolean deleted = deleteSubscription(fullSubscriptionName);
-    deleted = deleted || deleteTopic(fullTopicName);
-    return deleted;
-  }
+//  private boolean cleanup() {
+//    boolean deleted = deleteSubscription(fullSubscriptionName);
+//    deleted = deleted || deleteTopic(fullTopicName);
+//    return deleted;
+//  }
 
   private void generatePublishLoad() {
     logger.log(Level.INFO, "Beginning publishing");
