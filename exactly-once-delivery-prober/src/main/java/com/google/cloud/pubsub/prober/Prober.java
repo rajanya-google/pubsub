@@ -704,7 +704,7 @@ public class Prober {
                             "Published " + messageId + " in " + publishLatency.getMillis() + "ms");
                         long currentPublishCount = publishCount.incrementAndGet();
                         if (currentPublishCount % 1000 == 0) {
-                          logger.log(Level.INFO, "Successfully published %d messages.", currentPublishCount);
+                          logger.info(String.format("Successfully published %d messages.", currentPublishCount));
                         }
                       } catch (InterruptedException | ExecutionException e) {
                         logger.log(Level.WARNING, "Failed to publish", e);

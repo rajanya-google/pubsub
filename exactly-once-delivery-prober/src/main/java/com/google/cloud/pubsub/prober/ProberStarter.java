@@ -156,8 +156,8 @@ public class ProberStarter {
         .setMessageSize(parsedArgs.messageSize)
         .setMessageFilteredProbability(parsedArgs.messageFilteredProbability)
         .setSubscriberMaxOutstandingMessageCount(parsedArgs.subscriberMaxOutstandingMessageCount)
-        .setSubscriberMaxOutstandingBytes(parsedArgs.subscriberMaxOutstandingBytes)
-        .setExactlyOnceDelivery(parsedArgs.exactlyOnceDelivery);;
+        .setSubscriberMaxOutstandingBytes(parsedArgs.subscriberMaxOutstandingBytes);
+        //.setExactlyOnceDelivery(parsedArgs.exactlyOnceDelivery);
     Prober prober = builder.build();
     Future<?> loadFuture = Executors.newSingleThreadExecutor().submit(prober::start);
     try {
