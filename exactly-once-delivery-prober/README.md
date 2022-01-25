@@ -1,7 +1,7 @@
 ### Introduction
 
 The prober is designed to demonstrate effective use of Cloud Pub/Sub's
-[ordered delivery](https://cloud.google.com/pubsub/docs/ordering).
+exactly once delivery.
 
 ### Building
 
