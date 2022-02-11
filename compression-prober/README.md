@@ -67,3 +67,4 @@ that can be set.
 | message_filtered_probability             | Double                     | 0.0                          | The probability of a message being filtered out. Valid values are between 0.0 and 1.0.                                       |
 | subscriber_max_outstanding_message_count | Long                       | 10,000                       | The maximum number of messages to allow to be outstanding to each subscriber.                                                |
 | subscriber_max_outstanding_bytes         | Long                       | 1,000,000,000                | The maximum number of bytes to allow to be outstanding to each subscriber.                                                   |
+| compression                              | Boolean                    | true                         | Whether or not to compress messages.                                                                                         |

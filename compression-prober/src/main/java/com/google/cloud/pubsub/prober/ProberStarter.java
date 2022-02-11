@@ -31,22 +31,19 @@ import java.util.logging.Logger;
  */
 public class ProberStarter {
   public static class Args {
-    @Parameter(
-        names = "--project",
-        required = true,
-        description = "Cloud Project identifier to use")
-    private String project = null;
+    @Parameter(names = "--project", description = "Cloud Project identifier to use")
+    private String project = "cloud-pubsub-load-tests";
 
     @Parameter(names = "--endpoint", description = "Cloud Pub/Sub endpoint to run against.")
-    private String endpoint = "pubsub.googleapis.com:443";
+    private String endpoint = "loadtest-pubsub.sandbox.googleapis.com:443";
 
     @Parameter(names = "--topic_name", description = "Name of topic to create and use for tests.")
-    private String topicName = "cloud-pubsub-client-library-prober";
+    private String topicName = "publish-compression-test-topic";
 
     @Parameter(
         names = "--subscription_name",
         description = "Name of subscription to create and use for tests.")
-    private String subscriptionName = "cloud-pubsub-client-library-prober-sub";
+    private String subscriptionName = "publish-compression-test-sub";
 
     @Parameter(
         names = "--subscription_type",
@@ -100,10 +97,7 @@ public class ProberStarter {
         description = "The number of streams to create per subscriber.")
     private Integer subscriberStreamCount = 1;
 
-    @Parameter(
-        names = "--message_size",
-        description =
-            "The number of bytes per message. Set to <= 0 to generate randomly-sized messages")
+    @Parameter(names = "--message_size", description = "The number of bytes per message.")
     private Integer messageSize = 100;
 
     @Parameter(
@@ -124,6 +118,11 @@ public class ProberStarter {
         description = "The maximum number of bytes to allow to be outstanding to each subscriber")
     private Long subscriberMaxOutstandingBytes = 1_000_000_000L;
 
+    @Parameter(
+        names = "--compression",
+        description = "Whether or not to compress messages.",
+        arity = 1)
+    private boolean compression = true;
   }
 
   private static final Logger logger = Logger.getLogger(Prober.class.getName());
@@ -151,7 +150,8 @@ public class ProberStarter {
         .setMessageSize(parsedArgs.messageSize)
         .setMessageFilteredProbability(parsedArgs.messageFilteredProbability)
         .setSubscriberMaxOutstandingMessageCount(parsedArgs.subscriberMaxOutstandingMessageCount)
-        .setSubscriberMaxOutstandingBytes(parsedArgs.subscriberMaxOutstandingBytes);
+        .setSubscriberMaxOutstandingBytes(parsedArgs.subscriberMaxOutstandingBytes)
+        .setCompression(parsedArgs.compression);
     Prober prober = builder.build();
     Future<?> loadFuture = Executors.newSingleThreadExecutor().submit(prober::start);
     try {
