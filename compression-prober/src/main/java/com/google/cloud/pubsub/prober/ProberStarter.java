@@ -35,15 +35,15 @@ public class ProberStarter {
     private String project = "cloud-pubsub-load-tests";
 
     @Parameter(names = "--endpoint", description = "Cloud Pub/Sub endpoint to run against.")
-    private String endpoint = "loadtest-pubsub.sandbox.googleapis.com:443";
+    private String endpoint = "us-central1-loadtest-pubsub.sandbox.googleapis.com:443";
 
     @Parameter(names = "--topic_name", description = "Name of topic to create and use for tests.")
-    private String topicName = "publish-compression-test-topic";
+    private String topicName = "publish-compression-loadtest-topic";
 
     @Parameter(
         names = "--subscription_name",
         description = "Name of subscription to create and use for tests.")
-    private String subscriptionName = "publish-compression-test-sub";
+    private String subscriptionName = "publish-compression-loadtest-sub";
 
     @Parameter(
         names = "--subscription_type",
@@ -98,7 +98,7 @@ public class ProberStarter {
     private Integer subscriberStreamCount = 1;
 
     @Parameter(names = "--message_size", description = "The number of bytes per message.")
-    private Integer messageSize = 100;
+    private Integer messageSize = 500000; //500KB
 
     @Parameter(
         names = "--message_filtered_probability",
